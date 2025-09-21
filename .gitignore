@@ -1,0 +1,5 @@
+node_modules
+config.json
+package-lock.json
+registered.sqlite
+confirmationNumbers.csv

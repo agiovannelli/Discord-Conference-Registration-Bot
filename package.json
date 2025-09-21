@@ -1,0 +1,19 @@
+{
+  "name": "discord-conference-registration-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "app": "node deploy-commands.js && node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexander Giovannelli",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^6.3.8",
+    "discord.js": "^14.12.1",
+    "dotenv": "^16.4.1",
+    "sqlite3": "^5.1.7",
+    "xlsx": "^0.18.5"
+  }
+}
