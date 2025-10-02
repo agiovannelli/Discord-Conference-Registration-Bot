@@ -12,7 +12,7 @@ The setup process involves separate configurations for the Bot and the Discord S
    3. registrationNotFoundMessage when a user registration failed due to the registration number not being found
 3. Add the conference registration numbers to "confirmationNumbers.csv"
 4. Install the necessary node packages via command line: "npm install"
-5. Run the bot via command line: "node run app"
+5. Run the bot via command line: "npm run app"
 
 ### Server Setup
 1. Invite the bot to your server using the following URL: https://discord.com/oauth2/authorize?client_id=1205606888394199071
