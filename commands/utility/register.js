@@ -18,7 +18,7 @@ if (registrationNotFoundMessage == null)
 
 // if the spreadsheerURL is defined, then load the googleapis module
 if (spreadsheetURL && sheets == null) {
-    const { google } = require ('googleapis');
+    const { google } = require('googleapis');
     const credentials = JSON.parse(
         fs.readFileSync(path.join(__dirname, '../../gsheet_credentials.json'), 'utf8')
     );
@@ -38,15 +38,15 @@ if (spreadsheetURL && sheets == null) {
     const auth = new google.auth.GoogleAuth({
         credentials,
         scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      });
+    });
 
     sheets = google.sheets({ version: 'v4', auth });
 
     if (!registeredSheetName)
-        registeredSheetName= "Registered";
+        registeredSheetName = "Registered";
 
     if (!validationSheetName)
-        validationSheetName= "Validated";
+        validationSheetName = "Validated";
 
     if (!registrationNumberColumn)
         registrationNumberColumn = 'B';
@@ -64,7 +64,7 @@ module.exports = {
                 .setDescription('Conference registration confirmation number')
                 .setRequired(true)),
     async execute(interaction) {
-        
+
         const processFile = async (fileName) => {
             const records = [];
             const parser = fs
@@ -114,8 +114,8 @@ module.exports = {
         }
 
         const checkRegistrationGsheet = async () => {
-            const RANGE_REGISTRATION = registeredSheetName+'!'+registrationNumberColumn+':'+registrationNumberColumn;
-            const RANGE_VALIDATION = validationSheetName+'!A:A';
+            const RANGE_REGISTRATION = registeredSheetName + '!' + registrationNumberColumn + ':' + registrationNumberColumn;
+            const RANGE_VALIDATION = validationSheetName + '!A:A';
             const registration_number = interaction.options.getString('registration_number');
             try {
                 // Check registration
@@ -146,22 +146,21 @@ module.exports = {
                     // found the registration number
                     if (rows[i][0] === registration_number) {
                         return {
-                           success: false,
-                           result: registrationUsedMessage
+                            success: false,
+                            result: registrationUsedMessage
                         };
-		    }
-                 }
-                 // not found so we record it
-                 await validateRegistration(registration_number)
-                 return {
-                     success: true,
-                     result: welcomeMessage
-                 };
+                    }
+                }
+                // not found so we record it
+                await validateRegistration(registration_number)
+                return {
+                    success: true,
+                    result: welcomeMessage
+                };
             } catch (error) {
                 console.error(`[Error] ${error.message}`);
-		        console.error(`[Error] ${error.response_registration?.data || error}`);
+                console.error(`[Error] ${error.response_registration?.data || error}`);
             }
-
         }
 
         const checkDbForEntry = async (confNum) => {
@@ -177,7 +176,8 @@ module.exports = {
                     result = true;
                 }
                 // await interaction.deferReply({ephemeral: true});
-                await interaction.followUp({content:message, ephemeral: true});
+                await interaction.followUp({ content: message, ephemeral: true });
+                if (result) interaction.member.roles.add(role);
             });
             return {
                 success: result,
@@ -188,29 +188,23 @@ module.exports = {
         const insertIntoDb = async (confNum, userId) => {
             db.run(`INSERT INTO id_pairs (confirmation_number,discord_id) VALUES ("${confNum}","${userId}")`);
         };
-        
-        // Reply now so that discord doesn't timeout from the 3sec we have to reply
-        await interaction.reply({content: "Checking you registration number...", ephemeral: true});
-        
-        const role = interaction.guild.roles.cache.find(role => role.name === 'Attendee');
 
-	    let res = null;
+        await interaction.reply({ content: "Checking your registration number...", ephemeral: true });
+
+        const role = interaction.guild.roles.cache.find(role => role.name === 'Attendee');
+        let res = null;
 
         if (spreadsheetURL) {
             res = await checkRegistrationGsheet();
         }
-        else
-        {
+        else {
             let regData = await processFile('confirmationNumbers.csv');
             res = await checkRegistrationCsv(regData);
 
-            if (res.success) 
-                res = await checkDbForEntry(res.result);
+            if (res.success) res = await checkDbForEntry(res.result);
         }
-        // If all is ok, add the role to the user
-        if (res.success) {
-            interaction.member.roles.add(role);
-        }
-        await interaction.editReply({content: res.result, ephemeral: true});
+
+        if (res.success) interaction.member.roles.add(role);
+        await interaction.editReply({ content: res.result, ephemeral: true });
     },
 };
