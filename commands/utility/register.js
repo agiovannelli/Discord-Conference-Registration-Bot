@@ -172,7 +172,7 @@ module.exports = {
                     message = registrationUsedMessage;
                 }
                 else {
-                    insertIntoDb(csvRes.result, interaction.user.id);
+                    insertIntoDb(confNum, interaction.user.id);
                     message = welcomeMessage;
                     result = true;
                 }
