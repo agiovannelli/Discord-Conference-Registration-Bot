@@ -176,7 +176,7 @@ module.exports = {
                     message = welcomeMessage;
                     result = true;
                 }
-                await interaction.deferReply({ephemeral: true});
+                // await interaction.deferReply({ephemeral: true});
                 await interaction.followUp({content:message, ephemeral: true});
             });
             return {
