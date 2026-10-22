@@ -6,7 +6,7 @@ The setup process involves separate configurations for the Bot and the Discord S
 
 ### Bot Setup
 1. Clone the repository to the host client
-2. Add the "config.json" file to the local directory (contact the Repository owner for the file). You can setup the following additional parameters:
+2. Add the "config.json" file to the local directory (**contact the Repository owner, Alexander Giovannelli, for the file**). You can setup the following additional parameters:
    1. welcomeMessage when a user registration succeeded
    2. registrationUsedMessage when a user registration failed due to the registration number already being used
    3. registrationNotFoundMessage when a user registration failed due to the registration number not being found
